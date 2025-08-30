@@ -1,0 +1,47 @@
+# Kayease Global - Robots.txt
+# https://www.robotstxt.org/robotstxt.html
+
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Disallow admin and private areas
+Disallow: /admin/
+Disallow: /api/
+Disallow: /_next/
+Disallow: /static/
+Disallow: /uploads/
+Disallow: /temp/
+Disallow: /private/
+
+# Disallow file types that don't need indexing
+Disallow: /*.json$
+Disallow: /*.txt$
+Disallow: /*.pdf$
+Disallow: /*.doc$
+Disallow: /*.docx$
+
+# Allow sitemaps specifically (before disallowing other XML files)
+Allow: /sitemap.xml
+Allow: /sitemap-blog.xml
+Allow: /sitemap-portfolio.xml
+Allow: /sitemap-careers.xml
+
+# Disallow other XML files (but not sitemaps)
+Disallow: /*.xml$
+
+# Allow important directories
+Allow: /public/
+Allow: /assets/
+Allow: /images/
+Allow: /favicons/
+
+# Crawl delay (optional - be respectful to servers)
+Crawl-delay: 1
+
+# Sitemap locations
+Sitemap: https://kayease.com/sitemap-index.xml
+Sitemap: https://kayease.com/sitemap.xml
+
+# Host directive (preferred domain)
+Host: https://kayease.com

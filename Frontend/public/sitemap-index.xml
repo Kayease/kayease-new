@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <!-- Main sitemap -->
+  <sitemap>
+    <loc>https://kayease.com/sitemap.xml</loc>
+    <lastmod>2024-12-28</lastmod>
+  </sitemap>
+  
+  <!-- Blog sitemap (if you have one) -->
+  <sitemap>
+    <loc>https://kayease.com/sitemap-blog.xml</loc>
+    <lastmod>2024-12-28</lastmod>
+  </sitemap>
+  
+  <!-- Portfolio sitemap (if you have one) -->
+  <sitemap>
+    <loc>https://kayease.com/sitemap-portfolio.xml</loc>
+    <lastmod>2024-12-28</lastmod>
+  </sitemap>
+  
+  <!-- Careers sitemap (if you have one) -->
+  <sitemap>
+    <loc>https://kayease.com/sitemap-careers.xml</loc>
+    <lastmod>2024-12-28</lastmod>
+  </sitemap>
+  
+</sitemapindex> 
