@@ -60,10 +60,27 @@ import EmployeeAttendance from "pages/admin/EmployeeAttendance";
 import EmployeePayslips from "pages/admin/EmployeePayslips";
 import EmployeeCalendar from "pages/admin/EmployeeCalendar";
 
+// Manager Pages
+import ManagerDashboard from "pages/admin/ManagerDashboard";
+import ManagerProjects from "pages/admin/ManagerProjects";
+import ManagerTasks from "pages/admin/ManagerTasks";
+
+// Admin Pages
+import AdminPayslips from "pages/admin/AdminPayslips";
+import AdminLeaves from "pages/admin/AdminLeaves";
+import AdminPunchData from "pages/admin/AdminPunchData";
+import AdminCalendar from "pages/admin/AdminCalendar";
+import ProjectDetails from "pages/admin/ProjectDetails";
+
 const AppLayout = () => {
   const location = useLocation();
   const isAuthPage = ["/login", "/register"].includes(location.pathname);
-  const isAdminPage = location.pathname.startsWith("/admin") || location.pathname.startsWith("/employee") || location.pathname.startsWith("/hr") || location.pathname.startsWith("/manager") || location.pathname.startsWith("/website-manager");
+  const isAdminPage =
+    location.pathname.startsWith("/admin") ||
+    location.pathname.startsWith("/employee") ||
+    location.pathname.startsWith("/hr") ||
+    location.pathname.startsWith("/manager") ||
+    location.pathname.startsWith("/website-manager");
 
   return (
     <ErrorBoundary>
@@ -97,7 +114,7 @@ const AppLayout = () => {
         <Route path="/careers" element={<Careers />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        
+
         {/* Legal Pages */}
         <Route path="/privacy" element={<PrivacyPolicy />} />
         <Route path="/terms" element={<TermsOfService />} />
@@ -107,7 +124,9 @@ const AppLayout = () => {
         <Route
           path="/admin"
           element={
-            <ProtectedRoute allowedRoles={["ADMIN", "HR", "WEBSITE MANAGER", "EMPLOYEE"]}>
+            <ProtectedRoute
+              allowedRoles={["ADMIN", "HR", "WEBSITE MANAGER", "EMPLOYEE"]}
+            >
               <AdminWrapper>
                 <Dashboard />
               </AdminWrapper>
@@ -325,6 +344,68 @@ const AppLayout = () => {
           }
         />
 
+        {/* Admin Management Routes */}
+        <Route
+          path="/admin/payslips"
+          element={
+            <ProtectedRoute allowedRoles={["ADMIN"]}>
+              <AdminWrapper>
+                <AdminPayslips />
+              </AdminWrapper>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/leaves"
+          element={
+            <ProtectedRoute allowedRoles={["ADMIN"]}>
+              <AdminWrapper>
+                <AdminLeaves />
+              </AdminWrapper>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/punch-data"
+          element={
+            <ProtectedRoute allowedRoles={["ADMIN"]}>
+              <AdminWrapper>
+                <AdminPunchData />
+              </AdminWrapper>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/calendar"
+          element={
+            <ProtectedRoute
+              allowedRoles={[
+                "ADMIN",
+                "HR",
+                "WEBSITE MANAGER",
+                "MANAGER",
+                "EMPLOYEE",
+              ]}
+            >
+              <AdminWrapper>
+                <AdminCalendar />
+              </AdminWrapper>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/projects/:projectId"
+          element={
+            <ProtectedRoute
+              allowedRoles={["ADMIN", "WEBSITE MANAGER", "MANAGER", "EMPLOYEE"]}
+            >
+              <AdminWrapper>
+                <ProjectDetails />
+              </AdminWrapper>
+            </ProtectedRoute>
+          }
+        />
+
         {/* Employee Routes */}
         <Route
           path="/admin/employee"
@@ -380,6 +461,68 @@ const AppLayout = () => {
           path="/admin/employee/calendar"
           element={
             <ProtectedRoute allowedRoles={["EMPLOYEE"]}>
+              <AdminWrapper>
+                <EmployeeCalendar />
+              </AdminWrapper>
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Manager Routes */}
+        <Route
+          path="/admin/manager"
+          element={
+            <ProtectedRoute allowedRoles={["MANAGER"]}>
+              <AdminWrapper>
+                <ManagerDashboard />
+              </AdminWrapper>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/manager/projects"
+          element={
+            <ProtectedRoute allowedRoles={["MANAGER"]}>
+              <AdminWrapper>
+                <ManagerProjects />
+              </AdminWrapper>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/manager/tasks"
+          element={
+            <ProtectedRoute allowedRoles={["MANAGER"]}>
+              <AdminWrapper>
+                <ManagerTasks />
+              </AdminWrapper>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/manager/attendance"
+          element={
+            <ProtectedRoute allowedRoles={["MANAGER"]}>
+              <AdminWrapper>
+                <EmployeeAttendance />
+              </AdminWrapper>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/manager/payslips"
+          element={
+            <ProtectedRoute allowedRoles={["MANAGER"]}>
+              <AdminWrapper>
+                <EmployeePayslips />
+              </AdminWrapper>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/manager/calendar"
+          element={
+            <ProtectedRoute allowedRoles={["MANAGER"]}>
               <AdminWrapper>
                 <EmployeeCalendar />
               </AdminWrapper>

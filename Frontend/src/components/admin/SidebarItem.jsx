@@ -13,7 +13,12 @@ const SidebarItem = ({
   const location = useLocation();
   const isActive =
     location.pathname === href ||
-    (href !== "/admin" && location.pathname.startsWith(href));
+    (href !== "/admin" && 
+     href !== "/admin/employee" && 
+     href !== "/admin/manager" && 
+     location.pathname.startsWith(href)) ||
+    (href === "/admin/employee" && location.pathname === "/admin/employee") ||
+    (href === "/admin/manager" && location.pathname === "/admin/manager");
 
   // Contextual tooltip for count badge
   const countTooltip = (() => {

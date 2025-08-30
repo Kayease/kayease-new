@@ -24,33 +24,36 @@ const app = express();
 // Security Headers Middleware
 app.use((req, res, next) => {
   // X-Frame-Options: Prevents clickjacking attacks
-  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader("X-Frame-Options", "DENY");
 
   // X-Content-Type-Options: Prevents MIME type sniffing
-  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader("X-Content-Type-Options", "nosniff");
 
   // X-XSS-Protection: Enables XSS filtering
-  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader("X-XSS-Protection", "1; mode=block");
 
   // Referrer-Policy: Controls referrer information
-  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
 
   // Content-Security-Policy: Prevents XSS and other attacks
-  res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://res.cloudinary.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: http:; connect-src 'self' https:; frame-ancestors 'none';");
+  res.setHeader(
+    "Content-Security-Policy",
+    "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://res.cloudinary.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: http:; connect-src 'self' https:; frame-ancestors 'none';"
+  );
 
   next();
 });
 
-app.use(cors({
-  origin: [
-    'http://localhost:3000',
-    'https://kayease.com',
-    'https://www.kayease.com',
-
-
-  ],
-  credentials: true // if you use cookies/auth
-}));
+app.use(
+  cors({
+    origin: [
+      "http://localhost:3000",
+      "https://kayease.com",
+      "https://www.kayease.com",
+    ],
+    credentials: true, // if you use cookies/auth
+  })
+);
 app.use(express.json({ limit: "100mb" }));
 
 app.get("/api/health", (req, res) => {
@@ -72,17 +75,23 @@ app.use("/api/upload-resume", uploadResumeRoutes);
 app.use("/api/callback-requests", callbackRequestRoutes);
 
 const MONGO_URI = process.env.MONGO_URI;
-mongoose.connect(MONGO_URI)
+mongoose
+  .connect(MONGO_URI)
   .then(async () => {
     console.log("MongoDB connected✅✅");
     try {
-      const baseRoles = ['ADMIN', 'EMPLOYEE', 'MANAGER', 'HR', 'WEBSITE MANAGER'];
+      const baseRoles = [
+        "ADMIN",
+        "EMPLOYEE",
+        "MANAGER",
+        "HR",
+        "WEBSITE MANAGER",
+      ];
       for (const name of baseRoles) {
         await Role.updateOne({ name }, { name }, { upsert: true });
       }
-      console.log("Base roles ensured");
     } catch (e) {
-      console.error('Error ensuring base roles:', e);
+      console.error("Error ensuring base roles:", e);
     }
   })
   .catch((err) => console.error("MongoDB connection error❌❌:", err));
@@ -90,4 +99,4 @@ mongoose.connect(MONGO_URI)
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}✈️✈️`);
-}); 
+});

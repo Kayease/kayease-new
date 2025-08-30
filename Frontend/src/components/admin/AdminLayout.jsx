@@ -64,12 +64,29 @@ const AdminLayout = ({ children }) => {
       (role) => role.toLowerCase() === "website manager"
     );
     const hasHRRole = roleNames.some((role) => role.toLowerCase() === "hr");
+    const hasManagerRole = roleNames.some(
+      (role) => role.toLowerCase() === "manager"
+    );
 
     // Base dashboard - show appropriate dashboard based on role
-    const dashboardItem = hasEmployeeRole
+    const dashboardItem = hasAdminRole
+      ? {
+          name: "Dashboard",
+          href: "/admin",
+          icon: "LayoutDashboard",
+          showCount: false,
+        }
+      : hasEmployeeRole
       ? {
           name: "Dashboard",
           href: "/admin/employee",
+          icon: "LayoutDashboard",
+          showCount: false,
+        }
+      : hasManagerRole
+      ? {
+          name: "Dashboard",
+          href: "/admin/manager",
           icon: "LayoutDashboard",
           showCount: false,
         }
@@ -154,6 +171,30 @@ const AdminLayout = ({ children }) => {
           icon: "Phone",
           showCount: true,
           count: pendingCounts.callbackRequests,
+        },
+        {
+          name: "Payslips",
+          href: "/admin/payslips",
+          icon: "FileText",
+          showCount: false,
+        },
+        {
+          name: "Leaves",
+          href: "/admin/leaves",
+          icon: "Calendar",
+          showCount: false,
+        },
+        {
+          name: "Punch Data",
+          href: "/admin/punch-data",
+          icon: "Clock",
+          showCount: false,
+        },
+        {
+          name: "Calendar",
+          href: "/admin/calendar",
+          icon: "Calendar",
+          showCount: false,
         }
       );
     }
@@ -198,6 +239,12 @@ const AdminLayout = ({ children }) => {
           icon: "Phone",
           showCount: true,
           count: pendingCounts.callbackRequests,
+        },
+        {
+          name: "Calendar",
+          href: "/admin/calendar",
+          icon: "Calendar",
+          showCount: false,
         }
       );
     }
@@ -222,6 +269,48 @@ const AdminLayout = ({ children }) => {
           name: "Team",
           href: "/admin/team",
           icon: "UserPlus",
+          showCount: false,
+        },
+        {
+          name: "Calendar",
+          href: "/admin/calendar",
+          icon: "Calendar",
+          showCount: false,
+        }
+      );
+    }
+
+    // Manager items (if not admin, but has manager role)
+    if (hasManagerRole && !hasAdminRole) {
+      items.push(
+        {
+          name: "Projects",
+          href: "/admin/manager/projects",
+          icon: "FolderOpen",
+          showCount: false,
+        },
+        {
+          name: "Tasks",
+          href: "/admin/manager/tasks",
+          icon: "CheckSquare",
+          showCount: false,
+        },
+        {
+          name: "Attendance",
+          href: "/admin/manager/attendance",
+          icon: "Clock",
+          showCount: false,
+        },
+        {
+          name: "Payslips",
+          href: "/admin/manager/payslips",
+          icon: "FileText",
+          showCount: false,
+        },
+        {
+          name: "Calendar",
+          href: "/admin/manager/calendar",
+          icon: "Calendar",
           showCount: false,
         }
       );
@@ -326,9 +415,21 @@ const AdminLayout = ({ children }) => {
                       Website Manager
                     </span>
                   )}
+                {roleNames.some((role) => role.toLowerCase() === "manager") &&
+                  !roleNames.some((role) => role.toLowerCase() === "admin") &&
+                  !roleNames.some((role) => role.toLowerCase() === "hr") &&
+                  !roleNames.some(
+                    (role) => role.toLowerCase() === "website manager"
+                  ) && (
+                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-700 border border-indigo-200">
+                      <Icon name="UserCheck" size={10} className="mr-1" />
+                      Manager
+                    </span>
+                  )}
                 {roleNames.some((role) => role.toLowerCase() === "employee") &&
                   !roleNames.some((role) => role.toLowerCase() === "admin") &&
                   !roleNames.some((role) => role.toLowerCase() === "hr") &&
+                  !roleNames.some((role) => role.toLowerCase() === "manager") &&
                   !roleNames.some(
                     (role) => role.toLowerCase() === "website manager"
                   ) && (
@@ -421,6 +522,32 @@ const AdminLayout = ({ children }) => {
                         employeeRoutes[location.pathname] ||
                         "Employee Dashboard"
                       );
+                    }
+
+                    // Handle manager routes
+                    if (location.pathname.startsWith("/admin/manager")) {
+                      const managerRoutes = {
+                        "/admin/manager": "Manager Dashboard",
+                        "/admin/manager/projects": "Projects",
+                        "/admin/manager/tasks": "Tasks",
+                        "/admin/manager/attendance": "Attendance",
+                        "/admin/manager/payslips": "Payslips",
+                        "/admin/manager/calendar": "Calendar",
+                      };
+                      return (
+                        managerRoutes[location.pathname] || "Manager Dashboard"
+                      );
+                    }
+
+                    // Handle admin routes
+                    if (location.pathname.startsWith("/admin/")) {
+                      const adminRoutes = {
+                        "/admin/payslips": "Payslips",
+                        "/admin/leaves": "Leaves",
+                        "/admin/punch-data": "Punch Data",
+                        "/admin/calendar": "Calendar",
+                      };
+                      return adminRoutes[location.pathname] || "Admin Panel";
                     }
 
                     return "Admin Panel";
