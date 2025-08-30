@@ -8,11 +8,17 @@ import { userApi } from "../../utils/userApi";
 import DeleteConfirmationModal from "../../components/DeleteConfirmationModal";
 
 const RoleEditor = ({ roles, user, onSave }) => {
-  const [selected, setSelected] = React.useState((user.roles || []).map(r => r._id || r));
+  const [selected, setSelected] = React.useState(
+    (user.roles || []).map((r) => r._id || r)
+  );
   const [saving, setSaving] = React.useState(false);
 
   const toggle = (roleId) => {
-    setSelected(prev => prev.includes(roleId) ? prev.filter(id => id !== roleId) : [...prev, roleId]);
+    setSelected((prev) =>
+      prev.includes(roleId)
+        ? prev.filter((id) => id !== roleId)
+        : [...prev, roleId]
+    );
   };
 
   const save = async () => {
@@ -28,17 +34,31 @@ const RoleEditor = ({ roles, user, onSave }) => {
     <div className="flex items-center gap-2">
       <div className="relative">
         <details className="group">
-          <summary className="list-none cursor-pointer px-3 py-1 border rounded-lg text-sm text-slate-700 hover:bg-slate-50">Roles</summary>
+          <summary className="list-none cursor-pointer px-3 py-1 border rounded-lg text-sm text-slate-700 hover:bg-slate-50">
+            Roles
+          </summary>
           <div className="absolute z-10 mt-2 w-56 bg-white border rounded-lg shadow-lg p-2 max-h-64 overflow-auto">
-            {roles.map(r => (
-              <label key={r._id} className="flex items-center gap-2 px-2 py-1 hover:bg-slate-50 rounded">
-                <input type="checkbox" checked={selected.includes(r._id)} onChange={() => toggle(r._id)} />
+            {roles.map((r) => (
+              <label
+                key={r._id}
+                className="flex items-center gap-2 px-2 py-1 hover:bg-slate-50 rounded"
+              >
+                <input
+                  type="checkbox"
+                  checked={selected.includes(r._id)}
+                  onChange={() => toggle(r._id)}
+                />
                 <span className="text-sm">{r.name}</span>
               </label>
             ))}
             <div className="pt-2 flex justify-end">
-              <Button size="sm" onClick={save} disabled={saving} className="bg-primary text-white">
-                {saving ? 'Saving...' : 'Save'}
+              <Button
+                size="sm"
+                onClick={save}
+                disabled={saving}
+                className="bg-primary text-white"
+              >
+                {saving ? "Saving..." : "Save"}
               </Button>
             </div>
           </div>
@@ -97,7 +117,7 @@ const UserManagement = () => {
       const response = await userApi.getAllRoles();
       setRoles(response.data || []);
     } catch (error) {
-      console.error('Error loading roles:', error);
+      console.error("Error loading roles:", error);
     }
   };
 
@@ -108,7 +128,7 @@ const UserManagement = () => {
         name: formData.name,
         email: formData.email,
         password: formData.password,
-        roles: formData.roles || []
+        roles: formData.roles || [],
       };
       await userApi.createUser(payload);
       toast.success("User created successfully");
@@ -128,7 +148,7 @@ const UserManagement = () => {
         email: formData.email,
         password: formData.password || undefined,
         roles: formData.roles || undefined,
-        isActive: formData.isActive
+        isActive: formData.isActive,
       };
       await userApi.updateUser(selectedUser._id, payload);
       toast.success("User updated successfully");
@@ -200,7 +220,7 @@ const UserManagement = () => {
       name: user.name,
       email: user.email,
       password: "",
-      roles: (user.roles || []).map(r => r._id || r),
+      roles: (user.roles || []).map((r) => r._id || r),
       isActive: user.isActive,
     });
     setShowEditModal(true);
@@ -211,7 +231,9 @@ const UserManagement = () => {
     const matchesSearch =
       user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.email.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesRole = roleFilter === "all" || (user.roles || []).some(r => (r.name || r) === roleFilter);
+    const matchesRole =
+      roleFilter === "all" ||
+      (user.roles || []).some((r) => (r.name || r) === roleFilter);
     const matchesStatus =
       statusFilter === "all" ||
       (statusFilter === "active" && user.isActive) ||
@@ -223,7 +245,9 @@ const UserManagement = () => {
   // Get user statistics
   const stats = {
     total: users.length,
-    admins: users.filter((u) => (u.roles || []).some(r => (r.name || r) === 'ADMIN')).length,
+    admins: users.filter((u) =>
+      (u.roles || []).some((r) => (r.name || r) === "ADMIN")
+    ).length,
     active: users.filter((u) => u.isActive).length,
     inactive: users.filter((u) => !u.isActive).length,
     newUsers: users.filter((u) => {
@@ -335,8 +359,10 @@ const UserManagement = () => {
               className="px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors"
             >
               <option value="all">All Roles</option>
-              {roles.map(r => (
-                <option key={r._id} value={r.name}>{r.name}</option>
+              {roles.map((r) => (
+                <option key={r._id} value={r.name}>
+                  {r.name}
+                </option>
               ))}
             </select>
 
@@ -428,8 +454,21 @@ const UserManagement = () => {
                       <td className="px-6 py-4">
                         <div className="flex flex-wrap gap-2">
                           {(user.roles || []).map((r) => (
-                            <span key={r._id || r} className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${ (r.name || r) === 'ADMIN' ? 'bg-purple-100 text-purple-800' : 'bg-green-100 text-green-800' }`}>
-                              <Icon name={(r.name || r) === 'ADMIN' ? 'Shield' : 'User'} size={12} className="mr-1" />
+                            <span
+                              key={r._id || r}
+                              className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
+                                (r.name || r) === "ADMIN"
+                                  ? "bg-purple-100 text-purple-800"
+                                  : "bg-green-100 text-green-800"
+                              }`}
+                            >
+                              <Icon
+                                name={
+                                  (r.name || r) === "ADMIN" ? "Shield" : "User"
+                                }
+                                size={12}
+                                className="mr-1"
+                              />
                               {r.name || r}
                             </span>
                           ))}
@@ -471,7 +510,13 @@ const UserManagement = () => {
                             Edit
                           </Button>
 
-                          <RoleEditor roles={roles} user={user} onSave={(roleIds) => handleReplaceRoles(user._id, roleIds)} />
+                          <RoleEditor
+                            roles={roles}
+                            user={user}
+                            onSave={(roleIds) =>
+                              handleReplaceRoles(user._id, roleIds)
+                            }
+                          />
 
                           <Button
                             variant="outline"
@@ -589,16 +634,23 @@ const UserManagement = () => {
                   Roles
                 </label>
                 <div className="grid grid-cols-2 gap-2 border border-slate-200 rounded-lg p-3 max-h-40 overflow-auto">
-                  {roles.map(r => (
-                    <label key={r._id} className="flex items-center gap-2 text-sm">
+                  {roles.map((r) => (
+                    <label
+                      key={r._id}
+                      className="flex items-center gap-2 text-sm"
+                    >
                       <input
                         type="checkbox"
                         checked={(formData.roles || []).includes(r._id)}
                         onChange={(e) => {
                           const checked = e.target.checked;
                           const current = new Set(formData.roles || []);
-                          if (checked) current.add(r._id); else current.delete(r._id);
-                          setFormData({ ...formData, roles: Array.from(current) });
+                          if (checked) current.add(r._id);
+                          else current.delete(r._id);
+                          setFormData({
+                            ...formData,
+                            roles: Array.from(current),
+                          });
                         }}
                       />
                       {r.name}
@@ -709,16 +761,23 @@ const UserManagement = () => {
                   Roles
                 </label>
                 <div className="grid grid-cols-2 gap-2 border border-slate-200 rounded-lg p-3 max-h-40 overflow-auto">
-                  {roles.map(r => (
-                    <label key={r._id} className="flex items-center gap-2 text-sm">
+                  {roles.map((r) => (
+                    <label
+                      key={r._id}
+                      className="flex items-center gap-2 text-sm"
+                    >
                       <input
                         type="checkbox"
                         checked={(formData.roles || []).includes(r._id)}
                         onChange={(e) => {
                           const checked = e.target.checked;
                           const current = new Set(formData.roles || []);
-                          if (checked) current.add(r._id); else current.delete(r._id);
-                          setFormData({ ...formData, roles: Array.from(current) });
+                          if (checked) current.add(r._id);
+                          else current.delete(r._id);
+                          setFormData({
+                            ...formData,
+                            roles: Array.from(current),
+                          });
                         }}
                       />
                       {r.name}

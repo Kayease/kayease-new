@@ -7,7 +7,8 @@ import {
 } from "react-router-dom";
 import ScrollToTop from "components/ScrollToTop";
 import ErrorBoundary from "components/ErrorBoundary";
-// Add your imports here
+
+//Public Pages
 import Homepage from "pages/homepage";
 import Blog from "pages/blog";
 import BlogDetail from "pages/blog/BlogDetail";
@@ -18,12 +19,10 @@ import About from "pages/about";
 import Careers from "pages/careers";
 import Login from "pages/auth/Login";
 import Register from "pages/auth/Register";
+
+//Admin Pages
 import Dashboard from "pages/admin/Dashboard";
-import EmployeeDashboard from "pages/employee/Dashboard";
-import HRDashboard from "pages/hr/Dashboard";
-import ManagerDashboard from "pages/manager/Dashboard";
-import WebsiteManagerDashboard from "pages/websiteManager/Dashboard";
-import UserManagement from "pages/admin/UserManagement";
+import ProjectManagement from "pages/admin/ProjectManagement";
 import ApiTest from "pages/admin/ApiTest";
 import BlogManagement from "pages/admin/BlogManagement";
 import BlogForm from "pages/admin/BlogForm";
@@ -51,6 +50,15 @@ import { PendingCountsProvider } from "contexts/PendingCountsContext";
 import FloatingButtons from "components/FloatingButtons";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import UserManagement from "pages/admin/UserManagement";
+
+// Employee Pages
+import EmployeeDashboard from "pages/admin/EmployeeDashboard";
+import EmployeeProjects from "pages/admin/EmployeeProjects";
+import EmployeeTasks from "pages/admin/EmployeeTasks";
+import EmployeeAttendance from "pages/admin/EmployeeAttendance";
+import EmployeePayslips from "pages/admin/EmployeePayslips";
+import EmployeeCalendar from "pages/admin/EmployeeCalendar";
 
 const AppLayout = () => {
   const location = useLocation();
@@ -96,54 +104,10 @@ const AppLayout = () => {
         <Route path="/cookies" element={<CookiePolicy />} />
 
         {/* Protected Admin Routes */}
-        {/* Employee Dashboard (copy of admin) */}
-        <Route
-          path="/employee"
-          element={
-            <ProtectedRoute>
-              <AdminWrapper>
-                <EmployeeDashboard />
-              </AdminWrapper>
-            </ProtectedRoute>
-          }
-        />
-        {/* HR Dashboard */}
-        <Route
-          path="/hr"
-          element={
-            <ProtectedRoute>
-              <AdminWrapper>
-                <HRDashboard />
-              </AdminWrapper>
-            </ProtectedRoute>
-          }
-        />
-        {/* Manager Dashboard */}
-        <Route
-          path="/manager"
-          element={
-            <ProtectedRoute>
-              <AdminWrapper>
-                <ManagerDashboard />
-              </AdminWrapper>
-            </ProtectedRoute>
-          }
-        />
-        {/* Website Manager Dashboard */}
-        <Route
-          path="/website-manager"
-          element={
-            <ProtectedRoute>
-              <AdminWrapper>
-                <WebsiteManagerDashboard />
-              </AdminWrapper>
-            </ProtectedRoute>
-          }
-        />
         <Route
           path="/admin"
           element={
-            <ProtectedRoute requireAdmin={true}>
+            <ProtectedRoute allowedRoles={["ADMIN", "HR", "WEBSITE MANAGER", "EMPLOYEE"]}>
               <AdminWrapper>
                 <Dashboard />
               </AdminWrapper>
@@ -153,7 +117,7 @@ const AppLayout = () => {
         <Route
           path="/admin/users"
           element={
-            <ProtectedRoute requireAdmin={true}>
+            <ProtectedRoute allowedRoles={["ADMIN"]}>
               <AdminWrapper>
                 <UserManagement />
               </AdminWrapper>
@@ -161,9 +125,19 @@ const AppLayout = () => {
           }
         />
         <Route
+          path="/admin/projects"
+          element={
+            <ProtectedRoute allowedRoles={["ADMIN", "WEBSITE MANAGER"]}>
+              <AdminWrapper>
+                <ProjectManagement />
+              </AdminWrapper>
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/admin/api-test"
           element={
-            <ProtectedRoute requireAdmin={true}>
+            <ProtectedRoute allowedRoles={["ADMIN"]}>
               <AdminWrapper>
                 <ApiTest />
               </AdminWrapper>
@@ -173,7 +147,7 @@ const AppLayout = () => {
         <Route
           path="/admin/blogs"
           element={
-            <ProtectedRoute requireAdmin={true}>
+            <ProtectedRoute allowedRoles={["ADMIN", "WEBSITE MANAGER"]}>
               <AdminWrapper>
                 <BlogManagement />
               </AdminWrapper>
@@ -183,7 +157,7 @@ const AppLayout = () => {
         <Route
           path="/admin/blogs/create"
           element={
-            <ProtectedRoute requireAdmin={true}>
+            <ProtectedRoute allowedRoles={["ADMIN", "WEBSITE MANAGER"]}>
               <AdminWrapper>
                 <BlogForm />
               </AdminWrapper>
@@ -193,7 +167,7 @@ const AppLayout = () => {
         <Route
           path="/admin/blogs/edit/:id"
           element={
-            <ProtectedRoute requireAdmin={true}>
+            <ProtectedRoute allowedRoles={["ADMIN", "WEBSITE MANAGER"]}>
               <AdminWrapper>
                 <BlogForm />
               </AdminWrapper>
@@ -203,7 +177,7 @@ const AppLayout = () => {
         <Route
           path="/admin/careers"
           element={
-            <ProtectedRoute requireAdmin={true}>
+            <ProtectedRoute allowedRoles={["ADMIN", "HR"]}>
               <AdminWrapper>
                 <CareerManagement />
               </AdminWrapper>
@@ -213,7 +187,7 @@ const AppLayout = () => {
         <Route
           path="/admin/careers/create"
           element={
-            <ProtectedRoute requireAdmin={true}>
+            <ProtectedRoute allowedRoles={["ADMIN", "HR"]}>
               <AdminWrapper>
                 <CareerForm />
               </AdminWrapper>
@@ -223,7 +197,7 @@ const AppLayout = () => {
         <Route
           path="/admin/careers/edit/:id"
           element={
-            <ProtectedRoute requireAdmin={true}>
+            <ProtectedRoute allowedRoles={["ADMIN", "HR"]}>
               <AdminWrapper>
                 <CareerForm />
               </AdminWrapper>
@@ -233,7 +207,7 @@ const AppLayout = () => {
         <Route
           path="/admin/applications"
           element={
-            <ProtectedRoute requireAdmin={true}>
+            <ProtectedRoute allowedRoles={["ADMIN", "HR"]}>
               <AdminWrapper>
                 <JobApplicationsPage />
               </AdminWrapper>
@@ -243,7 +217,7 @@ const AppLayout = () => {
         <Route
           path="/admin/portfolio"
           element={
-            <ProtectedRoute requireAdmin={true}>
+            <ProtectedRoute allowedRoles={["ADMIN", "WEBSITE MANAGER"]}>
               <AdminWrapper>
                 <PortfolioManagement />
               </AdminWrapper>
@@ -253,7 +227,7 @@ const AppLayout = () => {
         <Route
           path="/admin/portfolio/new"
           element={
-            <ProtectedRoute requireAdmin={true}>
+            <ProtectedRoute allowedRoles={["ADMIN", "WEBSITE MANAGER"]}>
               <AdminWrapper>
                 <PortfolioForm />
               </AdminWrapper>
@@ -263,7 +237,7 @@ const AppLayout = () => {
         <Route
           path="/admin/portfolio/edit/:id"
           element={
-            <ProtectedRoute requireAdmin={true}>
+            <ProtectedRoute allowedRoles={["ADMIN", "WEBSITE MANAGER"]}>
               <AdminWrapper>
                 <PortfolioForm />
               </AdminWrapper>
@@ -273,7 +247,7 @@ const AppLayout = () => {
         <Route
           path="/admin/clients"
           element={
-            <ProtectedRoute requireAdmin={true}>
+            <ProtectedRoute allowedRoles={["ADMIN", "WEBSITE MANAGER"]}>
               <AdminWrapper>
                 <ClientList />
               </AdminWrapper>
@@ -283,7 +257,7 @@ const AppLayout = () => {
         <Route
           path="/admin/clients/new"
           element={
-            <ProtectedRoute requireAdmin={true}>
+            <ProtectedRoute allowedRoles={["ADMIN", "WEBSITE MANAGER"]}>
               <AdminWrapper>
                 <ClientForm />
               </AdminWrapper>
@@ -293,7 +267,7 @@ const AppLayout = () => {
         <Route
           path="/admin/clients/:id/edit"
           element={
-            <ProtectedRoute requireAdmin={true}>
+            <ProtectedRoute allowedRoles={["ADMIN", "WEBSITE MANAGER"]}>
               <AdminWrapper>
                 <ClientForm />
               </AdminWrapper>
@@ -303,7 +277,7 @@ const AppLayout = () => {
         <Route
           path="/admin/contacts"
           element={
-            <ProtectedRoute requireAdmin={true}>
+            <ProtectedRoute allowedRoles={["ADMIN", "WEBSITE MANAGER"]}>
               <AdminWrapper>
                 <ContactManagement />
               </AdminWrapper>
@@ -313,7 +287,7 @@ const AppLayout = () => {
         <Route
           path="/admin/team"
           element={
-            <ProtectedRoute requireAdmin={true}>
+            <ProtectedRoute allowedRoles={["ADMIN", "HR"]}>
               <AdminWrapper>
                 <TeamManagement />
               </AdminWrapper>
@@ -323,7 +297,7 @@ const AppLayout = () => {
         <Route
           path="/admin/team/create"
           element={
-            <ProtectedRoute requireAdmin={true}>
+            <ProtectedRoute allowedRoles={["ADMIN", "HR"]}>
               <AdminWrapper>
                 <TeamForm />
               </AdminWrapper>
@@ -333,7 +307,7 @@ const AppLayout = () => {
         <Route
           path="/admin/team/edit/:id"
           element={
-            <ProtectedRoute requireAdmin={true}>
+            <ProtectedRoute allowedRoles={["ADMIN", "HR"]}>
               <AdminWrapper>
                 <TeamForm />
               </AdminWrapper>
@@ -343,9 +317,71 @@ const AppLayout = () => {
         <Route
           path="/admin/callback-requests"
           element={
-            <ProtectedRoute requireAdmin={true}>
+            <ProtectedRoute allowedRoles={["ADMIN", "WEBSITE MANAGER"]}>
               <AdminWrapper>
                 <CallbackRequests />
+              </AdminWrapper>
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Employee Routes */}
+        <Route
+          path="/admin/employee"
+          element={
+            <ProtectedRoute allowedRoles={["EMPLOYEE"]}>
+              <AdminWrapper>
+                <EmployeeDashboard />
+              </AdminWrapper>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/employee/projects"
+          element={
+            <ProtectedRoute allowedRoles={["EMPLOYEE"]}>
+              <AdminWrapper>
+                <EmployeeProjects />
+              </AdminWrapper>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/employee/tasks"
+          element={
+            <ProtectedRoute allowedRoles={["EMPLOYEE"]}>
+              <AdminWrapper>
+                <EmployeeTasks />
+              </AdminWrapper>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/employee/attendance"
+          element={
+            <ProtectedRoute allowedRoles={["EMPLOYEE"]}>
+              <AdminWrapper>
+                <EmployeeAttendance />
+              </AdminWrapper>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/employee/payslips"
+          element={
+            <ProtectedRoute allowedRoles={["EMPLOYEE"]}>
+              <AdminWrapper>
+                <EmployeePayslips />
+              </AdminWrapper>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/employee/calendar"
+          element={
+            <ProtectedRoute allowedRoles={["EMPLOYEE"]}>
+              <AdminWrapper>
+                <EmployeeCalendar />
               </AdminWrapper>
             </ProtectedRoute>
           }

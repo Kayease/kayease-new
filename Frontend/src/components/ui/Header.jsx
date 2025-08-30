@@ -30,13 +30,13 @@ const Header = () => {
   // Resolve dashboard path based on roles
   const getDashboardPath = () => {
     const roles = user?.roles || [];
-    const names = roles.map(r => r.name || r);
-    if (names.includes('ADMIN')) return '/admin';
-    if (names.includes('HR')) return '/hr';
-    if (names.includes('MANAGER')) return '/manager';
-    if (names.includes('WEBSITE MANAGER')) return '/website-manager';
-    if (names.includes('EMPLOYEE')) return '/employee';
-    return '/';
+    const names = roles.map((r) => r.name || r);
+    if (names.includes("ADMIN")) return "/admin";
+    if (names.includes("HR")) return "/admin/hr";
+    if (names.includes("MANAGER")) return "/admin/manager";
+    if (names.includes("WEBSITE MANAGER")) return "/admin/website-manager";
+    if (names.includes("EMPLOYEE")) return "/admin/employee";
+    return "/";
   };
 
   // Add Dashboard nav item if logged in (any role)
@@ -191,45 +191,47 @@ const Header = () => {
       >
         <nav className="max-w-7xl mx-auto px-4 py-6">
           <div className="space-y-2">
-            {(user ? [...navigationItems] : navigationItems).map((item, index) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                onClick={closeMenu}
-                className={`flex items-center space-x-3 px-4 py-3 rounded-lg text-base font-medium transition-all duration-300 ${
-                  isActivePath(item.path)
-                    ? "text-primary bg-primary/5 border-l-4 border-primary"
-                    : "text-text-secondary hover:text-text-primary hover:bg-muted"
-                }`}
-                style={{ animationDelay: `${index * 50}ms` }}
-              >
-                <Icon
-                  name={item.icon}
-                  size={20}
-                  className={`transition-colors duration-300 ${
-                    isActivePath(item.path) ? "text-primary" : "text-current"
+            {(user ? [...navigationItems] : navigationItems).map(
+              (item, index) => (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  onClick={closeMenu}
+                  className={`flex items-center space-x-3 px-4 py-3 rounded-lg text-base font-medium transition-all duration-300 ${
+                    isActivePath(item.path)
+                      ? "text-primary bg-primary/5 border-l-4 border-primary"
+                      : "text-text-secondary hover:text-text-primary hover:bg-muted"
                   }`}
-                />
-                <span className="flex items-center">
-                  {item.name}
-                  {item.path === "/admin" && totalPending > 0 && (
-                    <span
-                      title={`Pending: ${totalPending}`}
-                      className="ml-2 inline-flex items-center justify-center px-2 py-0.5 text-xs font-semibold rounded-full bg-red-100 text-red-700 border border-red-200"
-                    >
-                      {totalPending}
-                    </span>
-                  )}
-                </span>
-                {isActivePath(item.path) && (
+                  style={{ animationDelay: `${index * 50}ms` }}
+                >
                   <Icon
-                    name="ChevronRight"
-                    size={16}
-                    className="ml-auto text-primary"
+                    name={item.icon}
+                    size={20}
+                    className={`transition-colors duration-300 ${
+                      isActivePath(item.path) ? "text-primary" : "text-current"
+                    }`}
                   />
-                )}
-              </Link>
-            ))}
+                  <span className="flex items-center">
+                    {item.name}
+                    {item.path === "/admin" && totalPending > 0 && (
+                      <span
+                        title={`Pending: ${totalPending}`}
+                        className="ml-2 inline-flex items-center justify-center px-2 py-0.5 text-xs font-semibold rounded-full bg-red-100 text-red-700 border border-red-200"
+                      >
+                        {totalPending}
+                      </span>
+                    )}
+                  </span>
+                  {isActivePath(item.path) && (
+                    <Icon
+                      name="ChevronRight"
+                      size={16}
+                      className="ml-auto text-primary"
+                    />
+                  )}
+                </Link>
+              )
+            )}
           </div>
 
           <div className="mt-6 pt-6 border-t border-slate-200">

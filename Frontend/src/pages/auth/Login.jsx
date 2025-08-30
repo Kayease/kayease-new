@@ -68,10 +68,9 @@ const Login = () => {
         const names = roles.map(r => r.name || r);
         let redirectPath = '/';
         if (names.includes('ADMIN')) redirectPath = '/admin';
-        else if (names.includes('HR')) redirectPath = '/hr';
-        else if (names.includes('MANAGER')) redirectPath = '/manager';
-        else if (names.includes('WEBSITE MANAGER')) redirectPath = '/website-manager';
-        else if (names.includes('EMPLOYEE')) redirectPath = '/employee';
+        else if (names.includes('HR')) redirectPath = '/admin';
+        else if (names.includes('WEBSITE MANAGER')) redirectPath = '/admin';
+        else if (names.includes('EMPLOYEE')) redirectPath = '/admin/employee';
         navigate(redirectPath, { replace: true });
       } else {
         toast.error(result.error);

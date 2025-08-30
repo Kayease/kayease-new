@@ -47,63 +47,227 @@ const AdminLayout = ({ children }) => {
     navigate("/login");
   };
 
-  // Navigation items with pending counts
-  const navigationItems = [
-    {
-      name: "Dashboard",
-      href: "/admin",
-      icon: "LayoutDashboard",
-      showCount: false,
-    },
-    { name: "Users", href: "/admin/users", icon: "Users", showCount: false },
-    {
-      name: "API Test",
-      href: "/admin/api-test",
-      icon: "TestTube",
-      showCount: false,
-    },
-    { name: "Blogs", href: "/admin/blogs", icon: "FileText", showCount: false },
-    {
-      name: "Portfolio",
-      href: "/admin/portfolio",
-      icon: "FolderOpen",
-      showCount: false,
-    },
-    {
-      name: "Careers",
-      href: "/admin/careers",
-      icon: "Briefcase",
-      showCount: false,
-    },
-    {
-      name: "Applications",
-      href: "/admin/applications",
-      icon: "UserCheck",
-      showCount: true,
-      count: pendingCounts.applications,
-    },
-    {
-      name: "Clients",
-      href: "/admin/clients",
-      icon: "Building",
-      showCount: false,
-    },
-    { name: "Team", href: "/admin/team", icon: "UserPlus", showCount: false },
-    {
-      name: "Contacts",
-      href: "/admin/contacts",
-      icon: "Mail",
-      showCount: true,
-      count: pendingCounts.contacts,
-    },
-    {
-      name: "Callback Requests",
-      href: "/admin/callback-requests",
-      icon: "Phone",
-      showCount: true,
-      count: pendingCounts.callbackRequests,
-    },
-  ];
+  // Get user roles
+  const userRoles = user?.roles || [];
+  const roleNames = userRoles.map((role) => role.name || role);
+
+  // Navigation items based on user role
+  const getNavigationItems = () => {
+    // Check if user has specific roles
+    const hasAdminRole = roleNames.some(
+      (role) => role.toLowerCase() === "admin"
+    );
+    const hasEmployeeRole = roleNames.some(
+      (role) => role.toLowerCase() === "employee"
+    );
+    const hasWebsiteManagerRole = roleNames.some(
+      (role) => role.toLowerCase() === "website manager"
+    );
+    const hasHRRole = roleNames.some((role) => role.toLowerCase() === "hr");
+
+    // Base dashboard - show appropriate dashboard based on role
+    const dashboardItem = hasEmployeeRole
+      ? {
+          name: "Dashboard",
+          href: "/admin/employee",
+          icon: "LayoutDashboard",
+          showCount: false,
+        }
+      : hasWebsiteManagerRole
+      ? {
+          name: "Dashboard",
+          href: "/admin/website-manager",
+          icon: "LayoutDashboard",
+          showCount: false,
+        }
+      : {
+          name: "Dashboard",
+          href: "/admin",
+          icon: "LayoutDashboard",
+          showCount: false,
+        };
+
+    const items = [dashboardItem];
+
+    // Admin-specific items
+    if (hasAdminRole) {
+      items.push(
+        {
+          name: "Users",
+          href: "/admin/users",
+          icon: "Users",
+          showCount: false,
+        },
+        {
+          name: "Projects",
+          href: "/admin/projects",
+          icon: "FolderOpen",
+          showCount: false,
+        },
+        {
+          name: "Blogs",
+          href: "/admin/blogs",
+          icon: "FileText",
+          showCount: false,
+        },
+        {
+          name: "Portfolio",
+          href: "/admin/portfolio",
+          icon: "FolderOpen",
+          showCount: false,
+        },
+        {
+          name: "Careers",
+          href: "/admin/careers",
+          icon: "Briefcase",
+          showCount: false,
+        },
+        {
+          name: "Applications",
+          href: "/admin/applications",
+          icon: "UserCheck",
+          showCount: true,
+          count: pendingCounts.applications,
+        },
+        {
+          name: "Clients",
+          href: "/admin/clients",
+          icon: "Building",
+          showCount: false,
+        },
+        {
+          name: "Team",
+          href: "/admin/team",
+          icon: "UserPlus",
+          showCount: false,
+        },
+        {
+          name: "Contacts",
+          href: "/admin/contacts",
+          icon: "Mail",
+          showCount: true,
+          count: pendingCounts.contacts,
+        },
+        {
+          name: "Callback Requests",
+          href: "/admin/callback-requests",
+          icon: "Phone",
+          showCount: true,
+          count: pendingCounts.callbackRequests,
+        }
+      );
+    }
+
+    // Website Manager items (if not admin, but has website manager role)
+    if (hasWebsiteManagerRole && !hasAdminRole) {
+      items.push(
+        {
+          name: "Projects",
+          href: "/admin/projects",
+          icon: "FolderOpen",
+          showCount: false,
+        },
+        {
+          name: "Blogs",
+          href: "/admin/blogs",
+          icon: "FileText",
+          showCount: false,
+        },
+        {
+          name: "Portfolio",
+          href: "/admin/portfolio",
+          icon: "FolderOpen",
+          showCount: false,
+        },
+        {
+          name: "Clients",
+          href: "/admin/clients",
+          icon: "Building",
+          showCount: false,
+        },
+        {
+          name: "Contacts",
+          href: "/admin/contacts",
+          icon: "Mail",
+          showCount: true,
+          count: pendingCounts.contacts,
+        },
+        {
+          name: "Callback Requests",
+          href: "/admin/callback-requests",
+          icon: "Phone",
+          showCount: true,
+          count: pendingCounts.callbackRequests,
+        }
+      );
+    }
+
+    // HR items (if not admin, but has HR role)
+    if (hasHRRole && !hasAdminRole) {
+      items.push(
+        {
+          name: "Careers",
+          href: "/admin/careers",
+          icon: "Briefcase",
+          showCount: false,
+        },
+        {
+          name: "Applications",
+          href: "/admin/applications",
+          icon: "UserCheck",
+          showCount: true,
+          count: pendingCounts.applications,
+        },
+        {
+          name: "Team",
+          href: "/admin/team",
+          icon: "UserPlus",
+          showCount: false,
+        }
+      );
+    }
+
+    // Employee-specific items (only for employees, not admins)
+    if (hasEmployeeRole && !hasAdminRole) {
+      items.push(
+        {
+          name: "My Projects",
+          href: "/admin/employee/projects",
+          icon: "FolderOpen",
+          showCount: false,
+        },
+        {
+          name: "Tasks",
+          href: "/admin/employee/tasks",
+          icon: "CheckSquare",
+          showCount: false,
+        },
+        {
+          name: "Attendance",
+          href: "/admin/employee/attendance",
+          icon: "Clock",
+          showCount: false,
+        },
+        {
+          name: "Payslips",
+          href: "/admin/employee/payslips",
+          icon: "FileText",
+          showCount: false,
+        },
+        {
+          name: "Calendar",
+          href: "/admin/employee/calendar",
+          icon: "Calendar",
+          showCount: false,
+        }
+      );
+    }
+
+    return items;
+  };
+
+  const navigationItems = getNavigationItems();
+  console.log("Navigation items:", navigationItems);
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -117,8 +281,8 @@ const AdminLayout = ({ children }) => {
 
       {/* Fixed Sidebar */}
       <div
-        className={`fixed inset-y-0 left-0 z-50 w-72 bg-white shadow-2xl border-r border-slate-300 transform transition-all duration-300 ease-in-out lg:translate-x-0 ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        className={`fixed inset-y-0 left-0 z-50 w-72 bg-white shadow-2xl border-r border-slate-300 transform transition-all duration-300 ease-in-out ${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         }`}
       >
         <div className="flex flex-col h-full">
@@ -140,10 +304,39 @@ const AdminLayout = ({ children }) => {
                 {user?.name.split(" ")[0]}
               </span>
               <span className="block text-sm font-medium text-primary">
-                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
-                  <Icon name="Shield" size={10} className="mr-1" />
-                  {user?.role}
-                </span>
+                {roleNames.some((role) => role.toLowerCase() === "admin") && (
+                  <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-700 border border-red-200">
+                    <Icon name="Shield" size={10} className="mr-1" />
+                    Admin
+                  </span>
+                )}
+                {roleNames.some((role) => role.toLowerCase() === "hr") &&
+                  !roleNames.some((role) => role.toLowerCase() === "admin") && (
+                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-700 border border-purple-200">
+                      <Icon name="Users" size={10} className="mr-1" />
+                      HR
+                    </span>
+                  )}
+                {roleNames.some(
+                  (role) => role.toLowerCase() === "website manager"
+                ) &&
+                  !roleNames.some((role) => role.toLowerCase() === "admin") && (
+                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700 border border-green-200">
+                      <Icon name="Globe" size={10} className="mr-1" />
+                      Website Manager
+                    </span>
+                  )}
+                {roleNames.some((role) => role.toLowerCase() === "employee") &&
+                  !roleNames.some((role) => role.toLowerCase() === "admin") &&
+                  !roleNames.some((role) => role.toLowerCase() === "hr") &&
+                  !roleNames.some(
+                    (role) => role.toLowerCase() === "website manager"
+                  ) && (
+                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700 border border-blue-200">
+                      <Icon name="User" size={10} className="mr-1" />
+                      Employee
+                    </span>
+                  )}
               </span>
             </div>
 
@@ -154,30 +347,6 @@ const AdminLayout = ({ children }) => {
               <Icon name="X" size={20} className="text-slate-600" />
             </button>
           </div>
-
-          {/* User info */}
-          {/* <div className="px-6 py-6 border-b border-slate-300 bg-gradient-to-r from-slate-50 to-white">
-            <div className="flex items-center space-x-4">
-              <div className="relative">
-                <div className="w-12 h-12 bg-gradient-to-br from-primary to-primary/80 rounded-xl flex items-center justify-center shadow-lg">
-                  <Icon name="User" size={24} className="text-white" />
-                </div>
-                <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-slate-800 truncate">
-                  {user?.name}
-                </p>
-                <p className="text-xs text-slate-500 truncate">{user?.email}</p>
-                <div className="flex items-center mt-1">
-                  <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
-                    <Icon name="Shield" size={10} className="mr-1" />
-                    {user?.role}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div> */}
 
           {/* Navigation */}
           <nav
@@ -226,13 +395,36 @@ const AdminLayout = ({ children }) => {
               </button>
               <div>
                 <h1 className="text-2xl font-bold text-slate-800">
-                  {navigationItems.find(
-                    (item) =>
-                      location.pathname === item.href ||
-                      (item.href !== "/admin" &&
-                        location.pathname.startsWith(item.href))
-                  )?.name || "Admin Panel"}{" "}
-                  Management
+                  {(() => {
+                    const currentItem = navigationItems.find(
+                      (item) =>
+                        location.pathname === item.href ||
+                        (item.href !== "/admin" &&
+                          location.pathname.startsWith(item.href))
+                    );
+
+                    if (currentItem) {
+                      return currentItem.name;
+                    }
+
+                    // Handle employee routes
+                    if (location.pathname.startsWith("/admin/employee")) {
+                      const employeeRoutes = {
+                        "/admin/employee": "Employee Dashboard",
+                        "/admin/employee/projects": "My Projects",
+                        "/admin/employee/tasks": "Tasks",
+                        "/admin/employee/attendance": "Attendance",
+                        "/admin/employee/payslips": "Payslips",
+                        "/admin/employee/calendar": "Calendar",
+                      };
+                      return (
+                        employeeRoutes[location.pathname] ||
+                        "Employee Dashboard"
+                      );
+                    }
+
+                    return "Admin Panel";
+                  })()}
                 </h1>
               </div>
             </div>
