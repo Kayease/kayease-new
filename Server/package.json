@@ -8,7 +8,8 @@
     "dev": "nodemon index.js",
     "build": "echo 'Server: no build step required'",
     "start": "node index.js",
-    "git": "node gitpush.js"
+    "git": "node gitpush.js",
+    "seed-projects": "node seed-projects.js"
   },
   "keywords": [],
   "author": "",

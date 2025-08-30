@@ -39,6 +39,12 @@ const projectSchema = new mongoose.Schema({
     type: String,
     trim: true
   },
+  category: {
+    type: String,
+    required: [true, 'Project category is required'],
+    enum: ['web-development', 'mobile-app', 'desktop-app', 'ai-ml', 'data-analytics', 'cybersecurity', 'cloud-infrastructure', 'e-commerce', 'cms', 'api-development', 'other'],
+    default: 'web-development'
+  },
   technologies: [{
     type: String,
     trim: true
@@ -52,7 +58,7 @@ const projectSchema = new mongoose.Schema({
     role: {
       type: String,
       required: true,
-      enum: ['developer', 'designer', 'tester', 'analyst', 'manager']
+      enum: ['developer', 'designer', 'tester', 'analyst', 'manager', 'content-manager', 'creative-director', 'ui-ux-designer', 'frontend-developer', 'backend-developer', 'fullstack-developer', 'devops-engineer', 'data-scientist', 'machine-learning-engineer', 'cybersecurity-specialist', 'cloud-architect', 'product-manager', 'project-coordinator', 'quality-assurance', 'business-analyst', 'research-developer', 'technical-writer', 'support-specialist']
     },
     assignedDate: {
       type: Date,

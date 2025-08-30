@@ -13,7 +13,7 @@ router.use(authenticateToken, requireAdmin);
 // @access  Admin
 router.get('/', async (req, res) => {
   try {
-    const { status, priority, search } = req.query;
+    const { status, priority, category, search } = req.query;
     
     let filter = {};
     
@@ -23,6 +23,10 @@ router.get('/', async (req, res) => {
     
     if (priority && priority !== 'all') {
       filter.priority = priority;
+    }
+    
+    if (category && category !== 'all') {
+      filter.category = category;
     }
     
     if (search) {
