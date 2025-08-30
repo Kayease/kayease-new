@@ -142,7 +142,7 @@ const EmailModal = ({
             <div className="lg:col-span-2 space-y-6">
               {/* Subject Line */}
               <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
-                <label className="block text-sm font-medium text-slate-700 mb-3 flex items-center gap-2">
+                <label className=" text-sm font-medium text-slate-700 mb-3 flex items-center gap-2">
                   <Icon name="Hash" size={16} className="text-primary" />
                   Subject Line
                 </label>
@@ -157,7 +157,7 @@ const EmailModal = ({
 
               {/* Message Editor */}
               <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
-                <label className="block text-sm font-medium text-slate-700 mb-3 flex items-center gap-2">
+                <label className=" text-sm font-medium text-slate-700 mb-3 flex items-center gap-2">
                   <Icon name="Edit3" size={16} className="text-primary" />
                   Message Content
                 </label>
